@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Demo_EF.Province>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProvinceName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProvinceAbbreviation)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProvinceName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProvinceAbbreviation)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ProvinceID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ProvinceID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ProvinceID })
+        </td>
+    </tr>
+}
+
+</table>

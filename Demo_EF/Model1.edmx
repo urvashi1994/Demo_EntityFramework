@@ -1,0 +1,721 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MVCDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="AddressID" />
+          </Key>
+          <Property Name="AddressID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="City" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="ProvinceID" Type="int" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Age" Type="int" />
+          <Property Name="EmailID" Type="varchar" MaxLength="25" />
+          <Property Name="Gender" Type="varchar" MaxLength="25" />
+          <Property Name="AddressID" Type="int" />
+        </EntityType>
+        <EntityType Name="Province">
+          <Key>
+            <PropertyRef Name="ProvinceID" />
+          </Key>
+          <Property Name="ProvinceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProvinceName" Type="varchar" MaxLength="25" />
+          <Property Name="ProvinceAbbreviation" Type="varchar" MaxLength="25" />
+        </EntityType>
+        <EntityType Name="ToDo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Task_name" Type="nchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__Address__Provinc__36B12243">
+          <End Role="Province" Type="Self.Province" Multiplicity="0..1" />
+          <End Role="Address" Type="Self.Address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Province">
+              <PropertyRef Name="ProvinceID" />
+            </Principal>
+            <Dependent Role="Address">
+              <PropertyRef Name="ProvinceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Person__AddressI__398D8EEE">
+          <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
+          <End Role="Person" Type="Self.Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="AddressID" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="AddressID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="GetAllTaskById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Taskid" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="GetCountByAge" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TotalNumber" Type="int" Mode="InOut" />
+          <Parameter Name="AGE" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetPopulationByProvince" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Population" Type="int" Mode="InOut" />
+          <Parameter Name="Province" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_Create_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Username" Type="nvarchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="Role" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_delete_person" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PersonID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_DeleteAddressByAddressID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AddressId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_DeleteProvinceById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="provinceId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_get_all_persons" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PersonCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_get_person" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PersonID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_get_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Username" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="Password" Type="nvarchar" Mode="InOut" />
+        </Function>
+        <Function Name="sp_GetAddressByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AddressId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_GetAddressCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AddressCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="sp_GetAddressesByProvince" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProvinceAbbreviation" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_GetProvinceByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="provinceId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_GetProvinceCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProvinceCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_insert_person" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FirstName" Type="varchar" Mode="In" />
+          <Parameter Name="LastName" Type="varchar" Mode="In" />
+          <Parameter Name="Age" Type="int" Mode="In" />
+          <Parameter Name="EmailID" Type="varchar" Mode="In" />
+          <Parameter Name="Gender" Type="varchar" Mode="In" />
+          <Parameter Name="AddressID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_insert_task" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Task_name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_update_person" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PersonID" Type="int" Mode="In" />
+          <Parameter Name="FirstName" Type="varchar" Mode="In" />
+          <Parameter Name="LastName" Type="varchar" Mode="In" />
+          <Parameter Name="Age" Type="int" Mode="In" />
+          <Parameter Name="EmailID" Type="varchar" Mode="In" />
+          <Parameter Name="Gender" Type="varchar" Mode="In" />
+          <Parameter Name="AddressID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_UpdateAddressByAddressID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AddressId" Type="int" Mode="In" />
+          <Parameter Name="Address" Type="varchar" Mode="In" />
+          <Parameter Name="City" Type="varchar" Mode="In" />
+          <Parameter Name="PostalCode" Type="varchar" Mode="In" />
+          <Parameter Name="ProvinceID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_UpdateProvincebyID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="provinceId" Type="int" Mode="In" />
+          <Parameter Name="provincename" Type="varchar" Mode="In" />
+          <Parameter Name="provinceabbreviation" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spGetAllInfoByEmailId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmailId" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spGetPersonInfoByGender" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="gender" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SpInsertinto_Address" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Address" Type="varchar" Mode="In" />
+          <Parameter Name="City" Type="varchar" Mode="In" />
+          <Parameter Name="PostalCode" Type="varchar" Mode="In" />
+          <Parameter Name="ProvinceID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spInsertIntoAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Address" Type="varchar" Mode="In" />
+          <Parameter Name="City" Type="varchar" Mode="In" />
+          <Parameter Name="PostalCode" Type="varchar" Mode="In" />
+          <Parameter Name="ProvinceID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SpInsertIntoProvince" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="provincename" Type="varchar" Mode="In" />
+          <Parameter Name="province" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="MVCDatabaseModelStoreContainer">
+          <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Province" EntityType="Self.Province" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ToDo" EntityType="Self.ToDo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Address__Provinc__36B12243" Association="Self.FK__Address__Provinc__36B12243">
+            <End Role="Province" EntitySet="Province" />
+            <End Role="Address" EntitySet="Address" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Person__AddressI__398D8EEE" Association="Self.FK__Person__AddressI__398D8EEE">
+            <End Role="Address" EntitySet="Address" />
+            <End Role="Person" EntitySet="Person" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MVCDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="AddressID" />
+          </Key>
+          <Property Name="AddressID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Address1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProvinceID" Type="Int32" />
+          <NavigationProperty Name="Province" Relationship="Self.FK__Address__Provinc__36B12243" FromRole="Address" ToRole="Province" />
+          <NavigationProperty Name="People" Relationship="Self.FK__Person__AddressI__398D8EEE" FromRole="Address" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Age" Type="Int32" />
+          <Property Name="EmailID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="AddressID" Type="Int32" />
+          <NavigationProperty Name="Address" Relationship="Self.FK__Person__AddressI__398D8EEE" FromRole="Person" ToRole="Address" />
+        </EntityType>
+        <EntityType Name="Province">
+          <Key>
+            <PropertyRef Name="ProvinceID" />
+          </Key>
+          <Property Name="ProvinceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProvinceName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="ProvinceAbbreviation" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Addresses" Relationship="Self.FK__Address__Provinc__36B12243" FromRole="Province" ToRole="Address" />
+        </EntityType>
+        <EntityType Name="ToDo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Task_name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK__Address__Provinc__36B12243">
+          <End Role="Province" Type="Self.Province" Multiplicity="0..1" />
+          <End Role="Address" Type="Self.Address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Province">
+              <PropertyRef Name="ProvinceID" />
+            </Principal>
+            <Dependent Role="Address">
+              <PropertyRef Name="ProvinceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Person__AddressI__398D8EEE">
+          <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
+          <End Role="Person" Type="Self.Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="AddressID" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="AddressID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MVCDatabaseEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Addresses" EntityType="Self.Address" />
+          <EntitySet Name="People" EntityType="Self.Person" />
+          <EntitySet Name="Provinces" EntityType="Self.Province" />
+          <EntitySet Name="ToDoes" EntityType="Self.ToDo" />
+          <EntitySet Name="UserInfoes" EntityType="Self.UserInfo" />
+          <AssociationSet Name="FK__Address__Provinc__36B12243" Association="Self.FK__Address__Provinc__36B12243">
+            <End Role="Province" EntitySet="Provinces" />
+            <End Role="Address" EntitySet="Addresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Person__AddressI__398D8EEE" Association="Self.FK__Person__AddressI__398D8EEE">
+            <End Role="Address" EntitySet="Addresses" />
+            <End Role="Person" EntitySet="People" />
+          </AssociationSet>
+          <FunctionImport Name="GetAllTaskById" ReturnType="Collection(MVCDatabaseModel.GetAllTaskById_Result)">
+            <Parameter Name="Taskid" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetCountByAge">
+            <Parameter Name="TotalNumber" Mode="InOut" Type="Int32" />
+            <Parameter Name="AGE" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetPopulationByProvince">
+            <Parameter Name="Population" Mode="InOut" Type="Int32" />
+            <Parameter Name="Province" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_Create_User">
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="Role" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_delete_person">
+            <Parameter Name="PersonID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_DeleteAddressByAddressID" ReturnType="Collection(MVCDatabaseModel.sp_DeleteAddressByAddressID_Result)">
+            <Parameter Name="AddressId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_DeleteProvinceById">
+            <Parameter Name="provinceId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_get_all_persons" ReturnType="Collection(MVCDatabaseModel.SP_get_all_persons_Result)">
+            <Parameter Name="PersonCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_get_person" ReturnType="Collection(MVCDatabaseModel.SP_get_person_Result)">
+            <Parameter Name="PersonID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_get_User" ReturnType="Collection(MVCDatabaseModel.SP_get_User_Result)">
+            <Parameter Name="Username" Mode="InOut" Type="String" />
+            <Parameter Name="Password" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetAddressByID" ReturnType="Collection(MVCDatabaseModel.sp_GetAddressByID_Result)">
+            <Parameter Name="AddressId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetAddressCount" ReturnType="Collection(Int32)">
+            <Parameter Name="AddressCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetAddressesByProvince" ReturnType="Collection(MVCDatabaseModel.sp_GetAddressesByProvince_Result)">
+            <Parameter Name="ProvinceAbbreviation" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetProvinceByID" ReturnType="Collection(MVCDatabaseModel.sp_GetProvinceByID_Result)">
+            <Parameter Name="provinceId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetProvinceCount" ReturnType="Collection(Int32)">
+            <Parameter Name="ProvinceCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_insert_person">
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="LastName" Mode="In" Type="String" />
+            <Parameter Name="Age" Mode="In" Type="Int32" />
+            <Parameter Name="EmailID" Mode="In" Type="String" />
+            <Parameter Name="Gender" Mode="In" Type="String" />
+            <Parameter Name="AddressID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_insert_task">
+            <Parameter Name="Task_name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_update_person">
+            <Parameter Name="PersonID" Mode="In" Type="Int32" />
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="LastName" Mode="In" Type="String" />
+            <Parameter Name="Age" Mode="In" Type="Int32" />
+            <Parameter Name="EmailID" Mode="In" Type="String" />
+            <Parameter Name="Gender" Mode="In" Type="String" />
+            <Parameter Name="AddressID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_UpdateAddressByAddressID" ReturnType="Collection(MVCDatabaseModel.sp_UpdateAddressByAddressID_Result)">
+            <Parameter Name="AddressId" Mode="In" Type="Int32" />
+            <Parameter Name="Address" Mode="In" Type="String" />
+            <Parameter Name="City" Mode="In" Type="String" />
+            <Parameter Name="PostalCode" Mode="In" Type="String" />
+            <Parameter Name="ProvinceID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_UpdateProvincebyID">
+            <Parameter Name="provinceId" Mode="In" Type="Int32" />
+            <Parameter Name="provincename" Mode="In" Type="String" />
+            <Parameter Name="provinceabbreviation" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spGetAllInfoByEmailId" ReturnType="Collection(MVCDatabaseModel.spGetAllInfoByEmailId_Result)">
+            <Parameter Name="EmailId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spGetPersonInfoByGender" ReturnType="Collection(MVCDatabaseModel.spGetPersonInfoByGender_Result)">
+            <Parameter Name="gender" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SpInsertinto_Address">
+            <Parameter Name="Address" Mode="In" Type="String" />
+            <Parameter Name="City" Mode="In" Type="String" />
+            <Parameter Name="PostalCode" Mode="In" Type="String" />
+            <Parameter Name="ProvinceID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spInsertIntoAddress" ReturnType="Collection(MVCDatabaseModel.spInsertIntoAddress_Result)">
+            <Parameter Name="Address" Mode="In" Type="String" />
+            <Parameter Name="City" Mode="In" Type="String" />
+            <Parameter Name="PostalCode" Mode="In" Type="String" />
+            <Parameter Name="ProvinceID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SpInsertIntoProvince" ReturnType="Collection(MVCDatabaseModel.SpInsertIntoProvince_Result)">
+            <Parameter Name="provincename" Mode="In" Type="String" />
+            <Parameter Name="province" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="GetAllTaskById_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Task_name" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_DeleteAddressByAddressID_Result">
+          <Property Type="Int32" Name="AddressID" Nullable="false" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="PostalCode" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="ProvinceID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_get_all_persons_Result">
+          <Property Type="Int32" Name="PersonID" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="Age" Nullable="true" />
+          <Property Type="String" Name="EmailID" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="25" />
+          <Property Type="Int32" Name="AddressID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_get_person_Result">
+          <Property Type="Int32" Name="PersonID" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="Age" Nullable="true" />
+          <Property Type="String" Name="EmailID" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="25" />
+          <Property Type="Int32" Name="AddressID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_get_User_Result">
+          <Property Type="String" Name="Username" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Role" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_GetAddressByID_Result">
+          <Property Type="Int32" Name="AddressID" Nullable="false" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="PostalCode" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="ProvinceID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_GetAddressesByProvince_Result">
+          <Property Type="String" Name="ProvinceAbbreviation" Nullable="true" MaxLength="25" />
+          <Property Type="Int32" Name="AddressID" Nullable="false" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="PostalCode" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="ProvinceID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_GetProvinceByID_Result">
+          <Property Type="Int32" Name="ProvinceID" Nullable="false" />
+          <Property Type="String" Name="ProvinceName" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="ProvinceAbbreviation" Nullable="true" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="sp_UpdateAddressByAddressID_Result">
+          <Property Type="Int32" Name="AddressID" Nullable="false" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="PostalCode" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="ProvinceID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="spGetAllInfoByEmailId_Result">
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="Age" Nullable="true" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="ProvinceName" Nullable="true" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="spGetPersonInfoByGender_Result">
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="Age" Nullable="true" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="ProvinceName" Nullable="true" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="spInsertIntoAddress_Result">
+          <Property Type="Int32" Name="AddressID" Nullable="false" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="PostalCode" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="ProvinceID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SpInsertIntoProvince_Result">
+          <Property Type="Int32" Name="ProvinceID" Nullable="false" />
+          <Property Type="String" Name="ProvinceName" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="ProvinceAbbreviation" Nullable="true" MaxLength="25" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MVCDatabaseModelStoreContainer" CdmEntityContainer="MVCDatabaseEntities1">
+          <EntitySetMapping Name="Addresses">
+            <EntityTypeMapping TypeName="MVCDatabaseModel.Address">
+              <MappingFragment StoreEntitySet="Address">
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+                <ScalarProperty Name="Address1" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People">
+            <EntityTypeMapping TypeName="MVCDatabaseModel.Person">
+              <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Provinces">
+            <EntityTypeMapping TypeName="MVCDatabaseModel.Province">
+              <MappingFragment StoreEntitySet="Province">
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+                <ScalarProperty Name="ProvinceName" ColumnName="ProvinceName" />
+                <ScalarProperty Name="ProvinceAbbreviation" ColumnName="ProvinceAbbreviation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ToDoes">
+            <EntityTypeMapping TypeName="MVCDatabaseModel.ToDo">
+              <MappingFragment StoreEntitySet="ToDo">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Task_name" ColumnName="Task_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInfoes">
+            <EntityTypeMapping TypeName="MVCDatabaseModel.UserInfo">
+              <MappingFragment StoreEntitySet="UserInfo">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetAllTaskById" FunctionName="MVCDatabaseModel.Store.GetAllTaskById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.GetAllTaskById_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Task_name" ColumnName="Task_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetCountByAge" FunctionName="MVCDatabaseModel.Store.GetCountByAge" />
+          <FunctionImportMapping FunctionImportName="GetPopulationByProvince" FunctionName="MVCDatabaseModel.Store.GetPopulationByProvince" />
+          <FunctionImportMapping FunctionImportName="SP_Create_User" FunctionName="MVCDatabaseModel.Store.SP_Create_User" />
+          <FunctionImportMapping FunctionImportName="SP_delete_person" FunctionName="MVCDatabaseModel.Store.SP_delete_person" />
+          <FunctionImportMapping FunctionImportName="sp_DeleteAddressByAddressID" FunctionName="MVCDatabaseModel.Store.sp_DeleteAddressByAddressID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.sp_DeleteAddressByAddressID_Result">
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_DeleteProvinceById" FunctionName="MVCDatabaseModel.Store.sp_DeleteProvinceById" />
+          <FunctionImportMapping FunctionImportName="SP_get_all_persons" FunctionName="MVCDatabaseModel.Store.SP_get_all_persons">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.SP_get_all_persons_Result">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_get_person" FunctionName="MVCDatabaseModel.Store.SP_get_person">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.SP_get_person_Result">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_get_User" FunctionName="MVCDatabaseModel.Store.SP_get_User">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.SP_get_User_Result">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetAddressByID" FunctionName="MVCDatabaseModel.Store.sp_GetAddressByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.sp_GetAddressByID_Result">
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetAddressCount" FunctionName="MVCDatabaseModel.Store.sp_GetAddressCount" />
+          <FunctionImportMapping FunctionImportName="sp_GetAddressesByProvince" FunctionName="MVCDatabaseModel.Store.sp_GetAddressesByProvince">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.sp_GetAddressesByProvince_Result">
+                <ScalarProperty Name="ProvinceAbbreviation" ColumnName="ProvinceAbbreviation" />
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetProvinceByID" FunctionName="MVCDatabaseModel.Store.sp_GetProvinceByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.sp_GetProvinceByID_Result">
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+                <ScalarProperty Name="ProvinceName" ColumnName="ProvinceName" />
+                <ScalarProperty Name="ProvinceAbbreviation" ColumnName="ProvinceAbbreviation" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetProvinceCount" FunctionName="MVCDatabaseModel.Store.sp_GetProvinceCount" />
+          <FunctionImportMapping FunctionImportName="SP_insert_person" FunctionName="MVCDatabaseModel.Store.SP_insert_person" />
+          <FunctionImportMapping FunctionImportName="SP_insert_task" FunctionName="MVCDatabaseModel.Store.SP_insert_task" />
+          <FunctionImportMapping FunctionImportName="SP_update_person" FunctionName="MVCDatabaseModel.Store.SP_update_person" />
+          <FunctionImportMapping FunctionImportName="sp_UpdateAddressByAddressID" FunctionName="MVCDatabaseModel.Store.sp_UpdateAddressByAddressID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.sp_UpdateAddressByAddressID_Result">
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_UpdateProvincebyID" FunctionName="MVCDatabaseModel.Store.sp_UpdateProvincebyID" />
+          <FunctionImportMapping FunctionImportName="spGetAllInfoByEmailId" FunctionName="MVCDatabaseModel.Store.spGetAllInfoByEmailId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.spGetAllInfoByEmailId_Result">
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="ProvinceName" ColumnName="ProvinceName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spGetPersonInfoByGender" FunctionName="MVCDatabaseModel.Store.spGetPersonInfoByGender">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.spGetPersonInfoByGender_Result">
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="ProvinceName" ColumnName="ProvinceName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SpInsertinto_Address" FunctionName="MVCDatabaseModel.Store.SpInsertinto_Address" />
+          <FunctionImportMapping FunctionImportName="spInsertIntoAddress" FunctionName="MVCDatabaseModel.Store.spInsertIntoAddress">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.spInsertIntoAddress_Result">
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SpInsertIntoProvince" FunctionName="MVCDatabaseModel.Store.SpInsertIntoProvince">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVCDatabaseModel.SpInsertIntoProvince_Result">
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+                <ScalarProperty Name="ProvinceName" ColumnName="ProvinceName" />
+                <ScalarProperty Name="ProvinceAbbreviation" ColumnName="ProvinceAbbreviation" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
